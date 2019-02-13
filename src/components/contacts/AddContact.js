@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { Consumer } from "../../Context";
-import axios from 'axios';
 import TextInputGroup from "../layout/TextInputGroup";
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import {addContact} from '../../actions/contactsActions'
 
 class AddContact extends Component {
   state = {
@@ -11,7 +12,7 @@ class AddContact extends Component {
     errors: {}
   };
 
-  onSubmit = async (dispatch, e) => {
+  onSubmit = e => {
     e.preventDefault();
     const { name, email, phone } = this.state;
 
@@ -39,13 +40,7 @@ class AddContact extends Component {
       phone
     };
 
-    const res = await axios.post('https://jsonplaceholder.typicode.com/users', newContact);
-    
-    dispatch({
-      type: "ADD_CONTACT",
-      payload: res.data
-    })
-
+    this.props.addContact(newContact);
     
 
     // clear state
@@ -66,14 +61,10 @@ class AddContact extends Component {
     const { name, email, phone, errors } = this.state;
 
     return (
-      <Consumer>
-        {value => {
-          const { dispatch } = value;
-          return (
             <div className="card mb-3">
               <div className="card-header">Add Contact</div>
               <div className="card-body">
-                <form onSubmit={this.onSubmit.bind(this, dispatch)}>
+                <form onSubmit={this.onSubmit}>
                   <TextInputGroup
                     label="Name"
                     name="name"
@@ -109,10 +100,12 @@ class AddContact extends Component {
               </div>
             </div>
           );
-        }}
-      </Consumer>
-    );
-  }
+        }
+      }
+
+
+AddContact.propTypes = {
+  addContact: PropTypes.func.isRequired
 }
 
-export default AddContact;
+export default connect(null, {addContact})(AddContact);

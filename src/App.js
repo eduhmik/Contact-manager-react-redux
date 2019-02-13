@@ -5,16 +5,17 @@ import UpdateContact from "./components/contacts/UpdateContact";
 import About from "./components/pages/About";
 import NotFound from './components/pages/NotFound';
 import {BrowserRouter as Router, Route, Switch} from 'react-router-dom';
-import { Provider } from "./Context";
+import { Provider } from "react-redux";
 import "./App.css";
 import Header from "./components/layout/Header";
 import "bootstrap/dist/css/bootstrap.min.css";
+import store from "./store";
 
 
 class App extends Component {
   render() {
     return (
-      <Provider>
+      <Provider store={store}>
       <Router>
       <div className="App">
         <Header branding="Contact Manager" />
